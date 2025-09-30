@@ -10,22 +10,20 @@ This project was bootstrapped with [Vite](https://vitejs.dev/), and is based on 
 
 ## Package Managers
 
-This project is currently set up to use [Yarn 4](https://yarnpkg.com/getting-started/usage) as the package manager.
-
-If you prefer to use another package manager, such as NPM, PNPM, or Bun, delete the `"packageManager"` section from `package.json` and the `.yarnrc.yml` and `yarn.lock` files, then install dependencies with your preferred package manager.
+This project is currently set up to use [pnpm](https://pnpm.io) as the package manager.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `yarn dev`
+### `pnpm dev`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:4173](http://localhost:4173) to view it in the browser.
+Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
 The page will reload if you make edits.<br />
 
-### `yarn build`
+### `pnpm build`
 
 Builds the app for production to the `dist` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
