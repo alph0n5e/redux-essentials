@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { client } from '@/api/client'
+import { createAppAsyncThunk } from '@/app/hooks'
 import { RootState } from '@/app/store'
 import { selectCurrentUsername } from '@/features/auth/authSlice'
 
@@ -7,16 +9,22 @@ type User = {
   name: string
 }
 
-const initialState: User[] = [
-  { id: '0', name: 'Lorem Ipsum' },
-  { id: '1', name: 'Dolorem Sut' },
-  { id: '2', name: 'Amet Megitur' },
-]
+export const fetchUsers = createAppAsyncThunk('users/fetchUsers', async () => {
+  const response = await client.get<User[]>('fakeApi/users')
+  return response.data
+})
+
+const initialState: User[] = []
 
 const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchUsers.fulfilled, (state, action) => {
+      return action.payload
+    })
+  },
 })
 
 export default usersSlice.reducer
