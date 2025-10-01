@@ -3,7 +3,7 @@ import { client } from '@/api/client'
 
 import { createAppAsyncThunk } from '@/app/hooks'
 import type { RootState } from '@/app/store'
-import { userLoggedOut } from '@/features/auth/authSlice'
+import { logout } from '@/features/auth/authSlice'
 
 type Reactions = {
   thumbsUp: number
@@ -26,14 +26,6 @@ export type Post = {
 
 type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
 type NewPost = Pick<Post, 'title' | 'content' | 'user'>
-
-const initialReactions: Reactions = {
-  thumbsUp: 0,
-  tada: 0,
-  heart: 0,
-  rocket: 0,
-  eyes: 0,
-}
 
 type PostsState = {
   posts: Post[]
@@ -88,7 +80,7 @@ const postsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(userLoggedOut, (state) => {
+      .addCase(logout.fulfilled, (state) => {
         return initialState
       })
       .addCase(fetchPosts.pending, (state, action) => {
@@ -115,6 +107,12 @@ export default postsSlice.reducer
 export const selectAllPosts = (state: RootState) => state.posts.posts
 
 export const selectPostById = (state: RootState, postId: string) => state.posts.posts.find((post) => post.id === postId)
+
+export const selectPostsByUser = (state: RootState, userId: string) => {
+  const allPosts = selectAllPosts(state)
+  // ⚠️ Will need refacto?
+  return allPosts.filter((post) => post.user === userId)
+}
 
 export const selectPostsStatus = (state: RootState) => state.posts.status
 export const selectPostsError = (state: RootState) => state.posts.error
