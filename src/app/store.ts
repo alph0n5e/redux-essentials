@@ -4,7 +4,6 @@ import { apiSlice } from '@/features/api/apiSlice'
 import authReducer from '@/features/auth/authSlice'
 import notificationsReducer from '@/features/notifications/notificationsSlice'
 import postsReducer from '@/features/posts/postsSlice'
-import usersReducer from '@/features/users/usersSlice'
 
 import { listenerMiddleware } from './listener.middleware'
 
@@ -13,7 +12,6 @@ export const store = configureStore({
     auth: authReducer,
     notifications: notificationsReducer,
     posts: postsReducer,
-    users: usersReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

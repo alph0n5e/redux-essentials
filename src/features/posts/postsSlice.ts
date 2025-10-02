@@ -10,6 +10,7 @@ import { client } from '@/api/client'
 import { createAppAsyncThunk } from '@/app/hooks'
 import { AppStartListening } from '@/app/listener.middleware'
 import type { RootState } from '@/app/store'
+import { apiSlice } from '@/features/api/apiSlice'
 import { logout } from '@/features/auth/authSlice'
 
 type Reactions = {
@@ -31,7 +32,7 @@ export type Post = {
   reactions: Reactions
 }
 
-type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
+export type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
 export type NewPost = Pick<Post, 'title' | 'content' | 'user'>
 
 export const fetchPosts = createAppAsyncThunk(
@@ -123,7 +124,7 @@ export const selectPostsError = (state: RootState) => state.posts.error
 
 export const addPostsListeners = (startAppListening: AppStartListening) => {
   startAppListening({
-    actionCreator: addNewPost.fulfilled,
+    matcher: apiSlice.endpoints.addNewPost.matchFulfilled,
     effect: async (action, listenerApi) => {
       const { toast } = await import('react-tiny-toast')
 

@@ -1,16 +1,31 @@
 import { Link, useParams } from 'react-router-dom'
+import { createSelector } from '@reduxjs/toolkit'
+import { TypedUseQueryStateResult } from '@reduxjs/toolkit/query/react'
 
 import { useAppSelector } from '@/app/hooks'
-import { selectPostsByUser } from '@/features/posts/postsSlice'
+import { useGetPostsQuery, type Post } from '@/features/api/apiSlice'
 
 import { selectUserById } from './usersSlice'
+
+type GetPostSelectFromResultArg = TypedUseQueryStateResult<Post[], any, any>
+
+const selectPostsForUser = createSelector(
+  (res: GetPostSelectFromResultArg) => res.data,
+  (_res: GetPostSelectFromResultArg, userId: string) => userId,
+  (data, userId) => data?.filter((post) => post.user === userId) ?? [],
+)
 
 export const UserPage = () => {
   const { userId } = useParams()
 
   const user = useAppSelector((state) => selectUserById(state, userId!))
 
-  const postsForUser = useAppSelector((state) => selectPostsByUser(state, userId!))
+  const { postsForUser } = useGetPostsQuery(undefined, {
+    selectFromResult: (result) => ({
+      ...result,
+      postsForUser: selectPostsForUser(result, userId!),
+    }),
+  })
 
   if (!user) {
     return (
